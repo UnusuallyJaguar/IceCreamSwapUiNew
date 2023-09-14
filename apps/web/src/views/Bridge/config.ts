@@ -704,13 +704,6 @@ const chains = [
         imageUri: 'https://www.bscscan.com/token/images/difi_32.png?v=093',
         resourceId: '0x00000000000000000000000938a5d325A8496c186Cf122946e9dD22f8a625b01',
       },
-      {
-        address: '0x5C44d3D2312AbA4d5F2406A98Bf374Bc76455092',
-        name: 'WOOF',
-        symbol: 'WOOF',
-        imageUri: 'https://icecreamswap-assets.s3.amazonaws.com/token/1116/0x5C44d3D2312AbA4d5F2406A98Bf374Bc76455092.png',
-        resourceId: '0x00000000000000000000005C44d3D2312AbA4d5F2406A98Bf374Bc7645509207',
-      },
     ],
   },
   {
@@ -807,13 +800,6 @@ const chains = [
         imageUri:
           'https://raw.githubusercontent.com/simone1999/trustwallet-assets/master/blockchains/bitgert/assets/0xC7E6d7E08A89209F02af47965337714153c529F0/logo.png',
         resourceId: '0x0000000000000000000000C7E6d7E08A89209F02af47965337714153c529F001',
-      },
-      {
-        address: '0xde686b9a1BbCCC62Fb1bb75f0952C84e7D9d79E4',
-        name: 'WOOF',
-        symbol: 'WOOF',
-        imageUri: 'https://icecreamswap-assets.s3.amazonaws.com/token/1116/0x5C44d3D2312AbA4d5F2406A98Bf374Bc76455092.png',
-        resourceId: '0x00000000000000000000005C44d3D2312AbA4d5F2406A98Bf374Bc7645509207',
       },
     ],
   },
