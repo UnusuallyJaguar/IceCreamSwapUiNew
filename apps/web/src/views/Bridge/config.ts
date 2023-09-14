@@ -118,13 +118,6 @@ const chains = [
         imageUri: 'https://www.bscscan.com/token/images/difi_32.png?v=093',
         resourceId: '0x00000000000000000000000938a5d325A8496c186Cf122946e9dD22f8a625b01',
       },
-      {
-        address: '0xe252FCb1Aa2E0876E9B5f3eD1e15B9b4d11A0b00',
-        name: 'CRYSTAL STONES',
-        symbol: 'CRYSTAL',
-        imageUri: 'https://icecreamswap-assets.s3.amazonaws.com/token/1116/0x005133502d02ddDe90D5f5283E4Af0F33A4a4db2.png',
-        resourceId: '0x0000000000000000000000005133502d02ddDe90D5f5283E4Af0F33A4a4db207',
-      },
     ],
   },
   {
@@ -717,13 +710,6 @@ const chains = [
         symbol: 'WOOF',
         imageUri: 'https://icecreamswap-assets.s3.amazonaws.com/token/1116/0x5C44d3D2312AbA4d5F2406A98Bf374Bc76455092.png',
         resourceId: '0x00000000000000000000005C44d3D2312AbA4d5F2406A98Bf374Bc7645509207',
-      },
-      {
-        address: '0x005133502d02ddDe90D5f5283E4Af0F33A4a4db2',
-        name: 'CRYSTAL STONES',
-        symbol: 'CRYSTAL',
-        imageUri: 'https://icecreamswap-assets.s3.amazonaws.com/token/1116/0x005133502d02ddDe90D5f5283E4Af0F33A4a4db2.png',
-        resourceId: '0x0000000000000000000000005133502d02ddDe90D5f5283E4Af0F33A4a4db207',
       },
     ],
   },
