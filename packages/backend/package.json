@@ -16,7 +16,6 @@
     "@aws-sdk/client-s3": "^3.317.0",
     "@icecreamswap/constants": "*",
     "@icecreamswap/database": "*",
-    "@pancakeswap/tokens": "*",
     "@tanstack/react-query": "^4.28.0",
     "@trpc/client": "^10.18.0",
     "@trpc/next": "^10.18.0",
