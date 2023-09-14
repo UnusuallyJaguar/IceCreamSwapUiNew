@@ -1,10 +1,10 @@
-import { SUPPORT_TOKEN_DEPLOYER } from 'config/constants/supportChains'
+import { SUPPORT_LOCKS } from 'config/constants/supportChains'
 import { CreateToken } from '../views/CreateToken'
 
 const LocksOverviewPage = () => {
   return <CreateToken />
 }
 
-LocksOverviewPage.chains = SUPPORT_TOKEN_DEPLOYER
+LocksOverviewPage.chains = SUPPORT_LOCKS
 
 export default LocksOverviewPage

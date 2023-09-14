@@ -76,6 +76,7 @@ const BuyModal: React.FC<DepositModalProps> = (props) => {
     true,
   )
 
+  console.log(fee.data?.feeAmount)
   const preview = (
     <>
       <Flex flexDirection="column" gap="1em">

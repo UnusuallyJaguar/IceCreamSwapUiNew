@@ -1,4 +1,5 @@
 import { Flex, Modal, useModalContext, Text, Button, Heading, Spinner } from '@pancakeswap/uikit'
+import { formatAmount } from '../../Bridge/formatter'
 import { useCallback, useState } from 'react'
 import { FormValues } from '../create-schema'
 import styled from 'styled-components'
@@ -6,14 +7,12 @@ import { useAddUserToken } from 'state/user/hooks'
 import { useToken } from 'hooks/Tokens'
 import useUserAddedTokens from 'state/user/hooks/useUserAddedTokens'
 import AddToWallet from './AddToWallet'
+import useTokenDeployer from '../useTokenDeployer'
 import { useAccount } from 'wagmi'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { utils } from 'ethers'
+import { BigNumber, utils } from 'ethers'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useTranslation } from '@pancakeswap/localization'
-import useTokenDeployerDividend, { useDeploymentFee } from '../useTokenDeployer'
-import { CurrencyAmount } from '@pancakeswap/sdk'
-import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import Divider from 'views/Farms/components/Divider'
 
 interface DepositModalProps {
   formValues: FormValues
@@ -30,6 +29,10 @@ const Subtitle = styled.span`
   color: ${({ theme }) => theme.colors.textSubtle};
 `
 
+const hasFeatures = (formValues: FormValues) => {
+  return formValues?.burnable || formValues?.mintable
+}
+
 type Steps = 'preview' | 'transfer' | 'completed'
 
 const CreateModal: React.FC<DepositModalProps> = (props) => {
@@ -37,60 +40,54 @@ const CreateModal: React.FC<DepositModalProps> = (props) => {
   const { formValues } = props
   const [step, setStep] = useState<Steps>('preview')
   const { onDismiss } = useModalContext()
+  const { chainId } = useActiveChainId()
   const [tokenAddress, setTokenAddress] = useState<string | null>(null)
   const token = useToken(tokenAddress)
-  const tokenDeployer = useTokenDeployerDividend()
+  const tokenDeployer = useTokenDeployer()
   const { address, status } = useAccount()
 
   const handleDeposit = async () => {
     const initialSupply = utils.parseUnits(String(formValues?.initialSupply || '0'), 18)
-    await tokenDeployer.deploy(
-      formValues?.tokenSymbol,
-      formValues?.tokenName,
-      initialSupply,
-      formValues?.buyTax * 100,
-      formValues?.sellTax * 100,
-      formValues?.marketingDistribution * 100,
-      formValues?.dividendDistribution * 100,
-      formValues?.liquidityDistribution * 100,
-      { gasLimit: 10_000_000 },
+    const maxSupply = utils.parseUnits(String(formValues?.maxSupply || '0'), 18)
+    await tokenDeployer.createToken(
+      {
+        name: formValues?.tokenName,
+        symbol: formValues?.tokenSymbol,
+        initialSupply,
+        maximumSupply: maxSupply,
+        burnable: formValues?.burnable,
+        mintable: formValues?.mintable,
+        crossChain: false,
+        minterDelay: 0,
+        vault: '0x0000000000000000000000000000000000000000',
+        underlying: '0x0000000000000000000000000000000000000000',
+      },
+      { gasLimit: 1000000 },
     )
     setStep('transfer')
-    tokenDeployer.on(
-      tokenDeployer.filters.TokenDeployed(),
-      (ta, creator, _tokenName, _tokenSymbol, _buyTax, _sellTax) => {
-        if (creator !== address) return
-        setTokenAddress(ta)
-        setStep('completed')
-        // fetch('/api/add-token', {
-        //   method: 'POST',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //   },
-        //   body: JSON.stringify({
-        //     name: formValues?.tokenName,
-        //     symbol: formValues?.tokenSymbol,
-        //     logo: formValues?.logo?.blob,
-        //     address: ta,
-        //     chainId,
-        //     decimals: 18,
-        //   }),
-        // })
-      },
-    )
+    tokenDeployer.on(tokenDeployer.filters.TokenCreated(address), (creator, ta, _tokenName) => {
+      if (creator !== address) return
+      setTokenAddress(ta)
+      setStep('completed')
+      fetch('/api/add-token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formValues?.tokenName,
+          symbol: formValues?.tokenSymbol,
+          logo: formValues?.logo?.blob,
+          address: ta,
+          chainId,
+          decimals: 18,
+        }),
+      })
+    })
   }
 
   const addToken = useAddUserToken()
   const userAddedTokens = useUserAddedTokens()
-  const { feeToken, feeAmount, deployerAddress } = useDeploymentFee()
-  const feeTokenToken = useToken(feeToken)
-  const [approvalState, approve] = useApproveCallback(
-    feeTokenToken &&
-      feeAmount &&
-      CurrencyAmount.fromRawAmount(feeTokenToken, utils.parseUnits(feeAmount.toString(), 0) as any),
-    deployerAddress,
-    true,
-  )
 
   const handleAddToken = useCallback(() => {
     if (token) {
@@ -98,7 +95,7 @@ const CreateModal: React.FC<DepositModalProps> = (props) => {
     } else {
       console.error(t('No token found'))
     }
-  }, [addToken, t, token])
+  }, [addToken, token])
 
   const handleDismiss = () => {
     onDismiss()
@@ -120,43 +117,29 @@ const CreateModal: React.FC<DepositModalProps> = (props) => {
         <Text fontSize="1em">{t('Initial Supply')}</Text>
         <Text fontSize="1em">{formValues?.initialSupply}</Text>
       </Flex>
-      <Divider />
-      <Flex alignItems="center" justifyContent="space-between">
-        <Text fontSize="1em">{t('Buy Tax')}</Text>
-        <Text fontSize="1em">{formValues?.buyTax}%</Text>
-      </Flex>
-      <Flex alignItems="center" justifyContent="space-between">
-        <Text fontSize="1em">{t('Sell Tax')}</Text>
-        <Text fontSize="1em">{formValues?.sellTax}%</Text>
-      </Flex>
-      <Flex marginTop="0.5em" alignItems="center" justifyContent="space-between">
-        <Text fontSize="1em">{t('Marketing Distribution')}</Text>
-        <Text fontSize="1em">{formValues?.marketingDistribution}%</Text>
-      </Flex>
-      <Flex alignItems="center" justifyContent="space-between">
-        <Text fontSize="1em">{t('Dividend Distribution')}</Text>
-        <Text fontSize="1em">{formValues?.dividendDistribution}%</Text>
-      </Flex>
-      <Flex alignItems="center" justifyContent="space-between">
-        <Text fontSize="1em">{t('Liquidity Distribution')}</Text>
-        <Text fontSize="1em">{formValues?.liquidityDistribution}%</Text>
-      </Flex>
-
-      <Divider />
-      <Flex alignItems="center" justifyContent="space-between">
-        <Text fontSize="1em">{t('Creation Fee')}</Text>
-        <Text fontSize="1em">{feeAmount ? utils.formatUnits(feeAmount, 18).toString() : null} ICE</Text>
-      </Flex>
+      {hasFeatures(formValues) && <Heading>{t('Features')}</Heading>}
+      {formValues?.burnable && (
+        <Flex alignItems="center" justifyContent="space-between">
+          <Text fontSize="1em">{t('Burnable')}</Text>
+          <Text fontSize="1em">{t('Yes')}</Text>
+        </Flex>
+      )}
+      {formValues?.mintable && (
+        <>
+          <Flex alignItems="center" justifyContent="space-between">
+            <Text fontSize="1em">{t('Mintable')}</Text>
+            <Text fontSize="1em">Yes</Text>
+          </Flex>
+          <Flex alignItems="center" justifyContent="space-between">
+            <Text fontSize="1em">{t('Max Supply')}</Text>
+            <Text fontSize="1em">{formValues?.maxSupply}</Text>
+          </Flex>
+        </>
+      )}
       {status === 'connected' ? (
-        approvalState !== ApprovalState.APPROVED ? (
-          <Button style={{ flexGrow: 1 }} onClick={approve}>
-            {t('Approve')}
-          </Button>
-        ) : (
-          <Button style={{ flexGrow: 1 }} onClick={handleDeposit}>
-            {t('Confirm')}
-          </Button>
-        )
+        <Button style={{ flexGrow: 1 }} onClick={handleDeposit}>
+          {t('Confirm')}
+        </Button>
       ) : (
         <ConnectWalletButton />
       )}
@@ -169,14 +152,12 @@ const CreateModal: React.FC<DepositModalProps> = (props) => {
       <Text display="inline" style={{ wordBreak: 'break-all' }}>
         {t('Token Address')}: {tokenAddress}
       </Text>
-      <Text>{t("What's next?")}</Text>
+      <Text>{t('What&apos;s next?')}</Text>
       <Button
         onClick={handleAddToken}
         disabled={userAddedTokens?.some((addedToken) => addedToken.address === tokenAddress)}
       >
-        {userAddedTokens?.some((addedToken) => addedToken.address === tokenAddress)
-          ? t('Imported')
-          : t('Import to Swap')}
+        {userAddedTokens?.some((addedToken) => addedToken.address === tokenAddress) ? t('Imported') : t('Import to Swap')}
       </Button>
       <AddToWallet
         tokenAddress={tokenAddress!}

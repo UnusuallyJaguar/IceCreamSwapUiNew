@@ -64,7 +64,6 @@
     "@pancakeswap/utils": "*",
     "@pancakeswap/wagmi": "*",
     "@passive-income/launchpad-contracts": "simone1999/Launchpad-contracts#c6fd508ec9e5f2563c41d5fe9a650cd087d730fa",
-    "@icecreamswap/contracts": "IceCreamSwapCom/IceCreamSwap-smart-contracts#8bb6df51dfe8875f8bb8209437fed7c6c759ee37",
     "@reduxjs/toolkit": "^1.8.6",
     "@sentry/nextjs": "^7.9.0",
     "@snapshot-labs/snapshot.js": "^0.4.40",
