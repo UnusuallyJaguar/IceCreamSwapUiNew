@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState, useMemo, useContext } from 'react'
-import { Currency, CurrencyAmount, Percent } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, NATIVE, Percent } from '@pancakeswap/sdk'
 import { Button, ArrowDownIcon, Box, Skeleton, Swap as SwapUI, Message, MessageText, Text, useModal } from '@pancakeswap/uikit'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
+import UnsupportedCurrencyFooter from 'components/UnsupportedCurrencyFooter'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useTranslation } from '@pancakeswap/localization'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
@@ -10,7 +11,7 @@ import AccessRisk from 'views/Swap/components/AccessRisk'
 
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { CommonBasesType } from 'components/SearchModal/types'
-import { AutoRow } from 'components/Layout/Row'
+import { AutoRow, RowBetween } from 'components/Layout/Row'
 import { AutoColumn } from 'components/Layout/Column'
 
 import { useCurrency } from 'hooks/Tokens'
@@ -35,17 +36,15 @@ import { useStableFarms } from '../StableSwap/hooks/useStableConfig'
 import { isAddress } from '../../../utils'
 import { SwapFeaturesContext } from '../SwapFeaturesContext'
 import { useAkkaSwapInfo } from '../AkkaSwap/hooks/useAkkaSwapInfo'
-import {
-  useIsAkkaSwapModeActive,
-  useIsAkkaSwapModeStatus
-} from "state/global/hooks";
+import { useIsAkkaContractSwapModeActive, useIsAkkaSwapModeActive, useIsAkkaSwapModeStatus } from 'state/global/hooks'
 import AkkaSwapCommitButton from '../AkkaSwap/components/AkkaSwapCommitButton'
 import AkkaAdvancedSwapDetailsDropdown from '../AkkaSwap/components/AkkaAdvancedSwapDetailsDropdown'
 import styled from 'styled-components'
 import { useApproveCallbackFromAkkaTrade } from '../AkkaSwap/hooks/useApproveCallbackFromAkkaTrade'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import { useAkkaRouterContract } from 'utils/exchange'
 import { useBUSDCurrencyAmount } from 'hooks/useBUSDPrice'
-import { getChain } from '@icecreamswap/constants'
-import { SUPPORT_AKKA_ROUTER } from "../../../config/constants/supportChains";
 
 function formatNumber(exponentialNumber: number): string {
   const str = exponentialNumber.toString()
@@ -69,9 +68,6 @@ export default function SwapForm() {
   const stableFarms = useStableFarms()
   const warningSwapHandler = useWarningImport()
 
-  const { account, chainId } = useActiveWeb3React()
-  const chainName = getChain(chainId).network
-
   // isAkkaSwapMode checks if this is akka router form or not from redux
   const [isAkkaSwapMode, toggleSetAkkaMode, toggleSetAkkaModeToFalse, toggleSetAkkaModeToTrue] =
     useIsAkkaSwapModeStatus()
@@ -79,6 +75,8 @@ export default function SwapForm() {
   // isAkkaSwapActive checks if akka router is generally active or not
   const [isAkkaSwapActive, toggleSetAkkaActive, toggleSetAkkaActiveToFalse, toggleSetAkkaActiveToTrue] =
     useIsAkkaSwapModeActive()
+
+  const { account, chainId } = useActiveWeb3React()
 
   // for expert mode
   const [isExpertMode] = useExpertModeManager()
@@ -291,14 +289,11 @@ export default function SwapForm() {
         : formattedAmounts[Field.OUTPUT]) : undefined,
   )
 
-  // whether AKKA router supports the current chain
-  const akkaRouterSupported = SUPPORT_AKKA_ROUTER.includes(chainId)
-
   return (
     <>
       <CurrencyInputHeader
-        title={t(akkaRouterSupported && isAkkaSwapActive? 'DEX Aggregator': 'Swap')}
-        subtitle={t(akkaRouterSupported && isAkkaSwapActive? `Best Trades on ${chainName.charAt(0).toUpperCase() + chainName.slice(1)}`: 'Trade tokens in an instant')}
+        title={t('Swap')}
+        subtitle={t('Trade tokens in an instant')}
         hasAmount={hasAmount}
         onRefreshPrice={onRefreshPrice}
         mutateAkkaRoute={mutateAkkaRoute}
