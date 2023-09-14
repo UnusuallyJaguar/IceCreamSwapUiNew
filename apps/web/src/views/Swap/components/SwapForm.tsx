@@ -197,7 +197,7 @@ export default function SwapForm() {
       setApprovalSubmitted(true)
     }
   }, [approval, approvalSubmitted])
-
+  
   useEffect(() => {
     if (akkaApproval === ApprovalState.PENDING) {
       setAkkaApprovalSubmitted(true)
@@ -298,7 +298,7 @@ export default function SwapForm() {
     <>
       <CurrencyInputHeader
         title={t(akkaRouterSupported && isAkkaSwapActive? 'DEX Aggregator': 'Swap')}
-        subtitle={akkaRouterSupported && isAkkaSwapActive? t('Best trades on %chain%', {chain: chainName.charAt(0).toUpperCase() + chainName.slice(1)}): t('Trade tokens in an instant')}
+        subtitle={t(akkaRouterSupported && isAkkaSwapActive? `Best Trades on ${chainName.charAt(0).toUpperCase() + chainName.slice(1)}`: 'Trade tokens in an instant')}
         hasAmount={hasAmount}
         onRefreshPrice={onRefreshPrice}
         mutateAkkaRoute={mutateAkkaRoute}
