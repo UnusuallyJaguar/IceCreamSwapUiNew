@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import FormError from '../../../views/Bridge/components/FormError'
 import FileInput from '../../../components/FileInput'
-import { FormValues, useSchema, toBase64 } from './add-token-schema'
+import { FormValues, schema, toBase64 } from './add-token-schema'
 import { useEffect, useMemo, useState } from 'react'
 import { useToken } from '../../../hooks/Tokens'
 import styled from 'styled-components'
@@ -20,7 +20,6 @@ const Logo = styled.img`
 `
 
 export const AddToken: React.FC = () => {
-  const schema = useSchema()
   const { t } = useTranslation()
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -59,7 +58,7 @@ export const AddToken: React.FC = () => {
   const submit = trpc.token.add.useMutation()
 
   return (
-    <AppWrapper title={t('Add Token')} subtitle={t('Add your own token in seconds')}>
+    <AppWrapper title="Create Token" subtitle="Create your own Token in seconds">
       <FormProvider {...form}>
         <form
           onSubmit={handleSubmit((data) => {
@@ -116,7 +115,7 @@ export const AddToken: React.FC = () => {
           </Flex>
           <Logo src={`data:image/png;base64,${logo.blob}`} />
           <Button type="submit" disabled={submit.isLoading}>
-            {t('Add Token')}
+            {t('Create Token')}
           </Button>
         </form>
       </FormProvider>

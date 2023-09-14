@@ -5,12 +5,11 @@ import { FormProvider, useForm } from 'react-hook-form'
 import FormError from 'views/Bridge/components/FormError'
 import FileInput from 'components/FileInput'
 import CreateModal from './components/CreateModal'
-import { FormValues, useSchema } from './create-schema'
+import { FormValues, schema } from './create-schema'
 import { useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 
 export const CreateCampaign: React.FC = () => {
-  const schema = useSchema()
   const { t } = useTranslation()
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),

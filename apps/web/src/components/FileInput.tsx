@@ -3,14 +3,12 @@ import React, { HTMLProps, useCallback, useEffect } from 'react'
 import { Accept, useDropzone } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
 import { useTheme } from 'styled-components'
-import { useTranslation } from '@pancakeswap/localization'
 
 interface Props extends Omit<HTMLProps<HTMLInputElement>, 'accept'> {
   accept: Accept
 }
 
 const FileInput: React.FC<Props> = (props) => {
-  const { t } = useTranslation()
   const { name, accept, ...rest } = props
   const { register, unregister, setValue, watch } = useFormContext()
   const onDrop = useCallback(
@@ -46,7 +44,7 @@ const FileInput: React.FC<Props> = (props) => {
       >
         {/* @ts-ignore */}
         <input {...rest} name={name} {...getInputProps()} />
-        {(files && files[0].name) || t('Click here or drop a file to upload')}
+        {(files && files[0].name) || 'Click here or drop a file to upload!'}
       </Input>
     </>
   )

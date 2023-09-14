@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import FormError from 'views/Bridge/components/FormError'
 import FileInput from 'components/FileInput'
 import CreateModal from './components/CreateModal'
-import { FormValues, useSchema } from './create-schema'
+import { FormValues, schema } from './create-schema'
 import { useState } from 'react'
 import InfoTooltip from '@pancakeswap/uikit/src/components/Timeline/InfoTooltip'
 import { useTranslation } from '@pancakeswap/localization'
@@ -17,7 +17,6 @@ const StyledFlex = styled(Flex)`
 `
 
 export const CreateToken: React.FC = () => {
-  const schema = useSchema()
   const { t } = useTranslation()
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -32,7 +31,7 @@ export const CreateToken: React.FC = () => {
   const [onPresentCreateModal] = useModal(<CreateModal formValues={formValues} />, true, true, 'tokenCreateModal')
 
   return (
-    <AppWrapper title={t('Create Token')} subtitle={t('Create your own token in seconds')}>
+    <AppWrapper title="Create Token" subtitle="Create your own Token in seconds">
       <FormProvider {...form}>
         <form
           onSubmit={handleSubmit((data) => {
@@ -42,17 +41,17 @@ export const CreateToken: React.FC = () => {
           style={{ display: 'flex', flexDirection: 'column', gap: '1em' }}
         >
           <Flex flexDirection="column">
-            <Text>{t('Token Name')}</Text>
-            <Input placeholder={t('Token Name')} {...register('tokenName')} />
+            <Text>Token Name</Text>
+            <Input placeholder="Token Name" {...register('tokenName')} />
             {errors.tokenName && <FormError>{errors.tokenName.message}</FormError>}
           </Flex>
           <Flex flexDirection="column">
-            <Text>{t('Token Symbol')}</Text>
-            <Input placeholder={t('Token Symbol')} {...register('tokenSymbol')} />
+            <Text>Token Symbol</Text>
+            <Input placeholder="Token Symbol" {...register('tokenSymbol')} />
             {errors.tokenSymbol && <FormError>{errors.tokenSymbol.message}</FormError>}
           </Flex>
           <Flex flexDirection="column">
-            <Text>{t('Logo')}</Text>
+            <Text>Logo</Text>
             <FileInput
               accept={{
                 'image/png': ['.png'],
@@ -63,39 +62,36 @@ export const CreateToken: React.FC = () => {
             {errors.logo && <FormError>{errors.logo.message}</FormError>}
           </Flex>
           <Flex flexDirection="column">
-            <Text>{t('Initial Supply')}</Text>
-            <Input type="number" placeholder={t('Initial Supply')} {...register('initialSupply')} />
+            <Text>Initial Supply</Text>
+            <Input type="number" placeholder="Initial Supply" {...register('initialSupply')} />
             {errors.initialSupply && <FormError>{errors.initialSupply.message}</FormError>}
           </Flex>
           <br />
           <Heading as="h3" size="sm">
-            {t('Taxes (in %)')}
+            Taxes (in %)
           </Heading>
           <Flex flexDirection="column">
-            <Text>{t('Buy Tax')}</Text>
+            <Text>Buy Tax</Text>
             <Input type="number" placeholder="0%" {...register('buyTax')} />
             {errors.buyTax && <FormError>{errors.buyTax.message}</FormError>}
           </Flex>
           <Flex flexDirection="column">
-            <Text>{t('Sell Tax')}</Text>
+            <Text>Sell Tax</Text>
             <Input type="number" placeholder="0%" {...register('sellTax')} />
             {errors.sellTax && <FormError>{errors.sellTax.message}</FormError>}
           </Flex>
           <br />
           <Heading as="h3" size="sm">
-            {t('Tax distribution (in %)')}
+            Tax distribution (in %)
           </Heading>
           <Flex flexDirection="column">
-            <StyledFlex>
-              {t('Marketing Distribution')}{' '}
-              <InfoTooltip text={t('The percentage of the tax that will be transferred to marketing wallet.')} />
-            </StyledFlex>
+            <Text>Marketing Distribution</Text>
             <Input type="number" placeholder="0%" {...register('marketingDistribution')} />
             {errors.marketingDistribution && <FormError>{errors.marketingDistribution.message}</FormError>}
           </Flex>
           <Flex flexDirection="column">
             <StyledFlex>
-              {t('Dividend Distribution')}{' '}
+              Dividend Distribution{' '}
               <InfoTooltip text={t('The percentage of the tax that will be distributed to the holders.')} />
             </StyledFlex>
             <Input type="number" placeholder="0%" {...register('dividendDistribution')} />
@@ -103,7 +99,7 @@ export const CreateToken: React.FC = () => {
           </Flex>
           <Flex flexDirection="column">
             <StyledFlex>
-              {t('Liquidity Distribution')}{' '}
+              Auto-Liquidity Distribution{' '}
               <InfoTooltip
                 text={t(
                   'The percentage of the tax that will be added to the liquidity pool and automatically paired with ICE.',
@@ -113,7 +109,7 @@ export const CreateToken: React.FC = () => {
             <Input type="number" placeholder="0%" {...register('liquidityDistribution')} />
             {errors.liquidityDistribution && <FormError>{errors.liquidityDistribution.message}</FormError>}
           </Flex>
-          <Button type="submit">{t('Create Token')}</Button>
+          <Button type="submit">Create Token</Button>
         </form>
       </FormProvider>
     </AppWrapper>

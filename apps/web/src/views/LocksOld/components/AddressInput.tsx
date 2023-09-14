@@ -23,7 +23,7 @@ const AddressInput: React.FC<AddressInputProps> = ({ value, onChange }) => {
         onChange={(e) => onChange(e.target.value)}
         isWarning={!isValid && touched}
       />
-      {!isValid && touched && <FormError>{t('Invalid token address')}</FormError>}
+      {!isValid && touched && <FormError>{t('Invalid Token Address')}</FormError>}
     </Flex>
   )
 }
