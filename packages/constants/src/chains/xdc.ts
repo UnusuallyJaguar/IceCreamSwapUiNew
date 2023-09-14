@@ -4,7 +4,7 @@ import IceChain from '../ice-chain'
 export const xdc: IceChain = {
   id: 50,
   name: 'XinFin XDC Network',
-  features: ['swap', 'akkaRouter', 'bridge', 'farms', 'staking', 'locks', 'info'],
+  features: ['swap', 'bridge', 'farms', 'staking', 'locks', 'info'],
   network: 'xdc',
   rpcUrls: {
     public: 'https://erpc.xinfin.network',
