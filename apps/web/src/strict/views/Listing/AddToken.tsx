@@ -1,11 +1,11 @@
-import { Button, Flex, Input, Text, useToast } from '@pancakeswap/uikit'
+import { Button, Checkbox, Flex, Heading, Input, Text, useModal, useToast } from '@pancakeswap/uikit'
 import AppWrapper from '../../../components/AppWrapper'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import FormError from '../../../views/Bridge/components/FormError'
 import FileInput from '../../../components/FileInput'
-import { FormValues, useSchema } from './add-token-schema'
-import { useEffect, useState } from 'react'
+import { FormValues, useSchema, toBase64 } from './add-token-schema'
+import { useEffect, useMemo, useState } from 'react'
 import { useToken } from '../../../hooks/Tokens'
 import styled from 'styled-components'
 import { convertImage } from './convert-image'
@@ -60,10 +60,6 @@ export const AddToken: React.FC = () => {
 
   return (
     <AppWrapper title={t('Add Token')} subtitle={t('Add your own token in seconds')}>
-      <Text small>
-        {t("You can easily list your token on IceCreamSwap. For this you need to complete KYC, delegate the KYC to your token and have a minimum of $4k liquidity, while liquidity paired with ICE counts double.")}
-      </Text>
-      <br/>
       <FormProvider {...form}>
         <form
           onSubmit={handleSubmit((data) => {
