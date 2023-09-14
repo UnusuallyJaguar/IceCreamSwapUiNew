@@ -1,18 +1,18 @@
 import { ChainId } from '@pancakeswap/sdk'
 
-export const INFO_CLIENT_BITGERT = 'https://the-graph.icecreamswap.com/subgraphs/name/icecreamswap/exchange-v2-bitgert'
-export const BLOCKS_CLIENT_BITGERT = 'https://the-graph.icecreamswap.com/subgraphs/name/icecreamswap/blocks-bitgert'
+export const INFO_CLIENT_BITGERT = 'https://graph-bitgert.icecreamswap.com/subgraphs/name/simone1999/icecreamswap-bitgert'
+export const BLOCKS_CLIENT_BITGERT = 'https://graph-bitgert.icecreamswap.com/subgraphs/name/icecreamswap/blocks-bitgert'
 
-export const INFO_CLIENT_XDC = 'https://the-graph.icecreamswap.com/subgraphs/name/icecreamswap/exchange-v2-xdc'
-export const BLOCKS_CLIENT_XDC = 'https://the-graph.icecreamswap.com/subgraphs/name/icecreamswap/blocks-xdc'
+export const INFO_CLIENT_XDC = 'https://graph-xdc.icecreamswap.com/subgraphs/name/icecreamswap/exchange-xdc'
+export const BLOCKS_CLIENT_XDC = 'https://graph-xdc.icecreamswap.com/subgraphs/name/icecreamswap/blocks-xdc'
 
-export const INFO_CLIENT_CORE = 'https://the-graph.icecreamswap.com/subgraphs/name/icecreamswap/exchange-v2-core'
-export const BLOCKS_CLIENT_CORE = 'https://the-graph.icecreamswap.com/subgraphs/name/icecreamswap/blocks-core'
+export const INFO_CLIENT_CORE = 'https://graph-core.icecreamswap.com/subgraphs/name/simone1999/icecreamswap-core'
+export const BLOCKS_CLIENT_CORE = 'https://graph-core.icecreamswap.com/subgraphs/name/icecreamswap/blocks-core'
 
 
 
 export const STABLESWAP_SUBGRAPH_CLIENT = 'https://api.thegraph.com/subgraphs/name/pancakeswap/exchange-stableswap'
-export const GRAPH_HEALTH = 'https://the-graph-status.icecreamswap.com/graphql'
+export const GRAPH_HEALTH = 'https://api.thegraph.com/index-node/graphql'
 
 export const FARM_API = 'https://farms.pancake-swap.workers.dev'
 
